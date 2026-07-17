@@ -1,5 +1,28 @@
-console.log("JavaScript connected successfully");            
 "use strict";
+
+console.log("JavaScript connected successfully");
+
+// --- Storage helpers (defined first so they are available immediately) ---
+
+function loadFromStorage(key, fallback) {
+  try {
+    const storedValue = localStorage.getItem(key);
+    return storedValue ? JSON.parse(storedValue) : fallback;
+  } catch (error) {
+    console.error(`Could not load ${key}:`, error);
+    return fallback;
+  }
+}
+
+function saveToStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error(`Could not save ${key}:`, error);
+  }
+}
+
+// --- Storage keys ---
 
 const STORAGE_KEYS = {
   tasks: "lifeDashboardTasks",
@@ -8,6 +31,8 @@ const STORAGE_KEYS = {
   theme: "lifeDashboardTheme",
   spotify: "spotifyPlaylist"
 };
+
+// --- App state (loaded from localStorage on startup) ---
 
 const state = {
   tasks: loadFromStorage(STORAGE_KEYS.tasks, []),
@@ -91,24 +116,6 @@ function saveDailyGoal() {
 saveDailyGoalButton.addEventListener("click", saveDailyGoal);
 
 loadDailyGoal();
-
-function loadFromStorage(key, fallback) {
-  try {
-    const storedValue = localStorage.getItem(key);
-    return storedValue ? JSON.parse(storedValue) : fallback;
-  } catch (error) {
-    console.error(`Could not load ${key}:`, error);
-    return fallback;
-  }
-}
-
-function saveToStorage(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
-    console.error(`Could not save ${key}:`, error);
-  }
-}
 
 function updateDateTime() {
   const now = new Date();
